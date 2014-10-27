@@ -1,0 +1,17 @@
+{
+    "name":"samsonos/cms_input_upload",
+    "description":"SamsonCMS generic upload input field module",
+    "author":"Vitaly Iegorov <egorov@samsonos.com>",
+    "require":{
+        "samsonos/cms_field":"*",
+        "samsonos/php_upload":"*"
+    },
+    "license":"Open Software License (OSL) v 3.0",
+    "homepage":"http://samsonos.com/",
+    "autoload": {
+        "classmap": ["src/"],
+        "psr-0": {
+            "samson\\cms\\input": "src/"
+        }
+    }
+}
