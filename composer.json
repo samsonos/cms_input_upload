@@ -3,7 +3,7 @@
     "description":"SamsonCMS generic upload input field module",
     "author":"Vitaly Iegorov <egorov@samsonos.com>",
     "require":{
-        "samsonos/cms_field":"*",
+        "samsonos/cms_input":"*",
         "samsonos/php_upload":"*"
     },
     "license":"Open Software License (OSL) v 3.0",
