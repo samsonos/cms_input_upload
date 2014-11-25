@@ -21,7 +21,7 @@ class File extends Field
 		$upload->upload($file_path);
 
 		// Save path to file in DB
-		Field::fromMetadata( $_GET['e'], $_GET['f'], $_GET['i'] )->save('/cms/'.$file_path);
+		Field::fromMetadata( $_GET['e'], $_GET['f'], $_GET['i'] )->save($file_path);
 	
 		// Return upload object for further usage
 		return $upload;
