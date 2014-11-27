@@ -20,8 +20,6 @@ class File extends Field
 		// Uploading file to server;
 		$upload->upload($file_path);
 
-        trace($file_path);
-
 		// Save path to file in DB
 		Field::fromMetadata( $_GET['e'], $_GET['f'], $_GET['i'] )->save($file_path);
 	
