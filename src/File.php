@@ -36,7 +36,7 @@ class File extends Field
 		$field = Field::fromMetadata( $_GET['e'], $_GET['f'], $_GET['i'] );
 		
 		// Build uploaded file path
-		$file = getcwd().Upload::UPLOAD_PATH.basename($field->obj->Value);
+		$file = $field->obj->Value;
 		
 		// If uploaded file exists - delete it
 		if( file_exists( $file ) ) unlink( $file );
