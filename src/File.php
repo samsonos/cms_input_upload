@@ -20,6 +20,13 @@ class File extends Field
 		// Uploading file to server;
 		$upload->upload($file_path);
 
+        // Call scale if it is loaded
+        if (class_exists('\samson\scale\ScaleController', false) && exif_imagetype($upload->fullPath())) {
+            /** @var \samson\scale\ScaleController $scale */
+            $scale = m('scale');
+            $scale->resize($upload->fullPath(), $upload->name(), $upload->uploadDir);
+        }
+
 		// Save path to file in DB
 		Field::fromMetadata( $_GET['e'], $_GET['f'], $_GET['i'] )->save($file_path);
 	
@@ -37,9 +44,34 @@ class File extends Field
 		
 		// Build uploaded file path
 		$file = $field->obj->Value;
-		
-		// If uploaded file exists - delete it
-		if( file_exists( $file ) ) unlink( $file );
+
+        // Delete thumbnails
+        if (class_exists('\samson\scale\ScaleController', false) && exif_imagetype($file)) {
+
+            /** @var string $path Path to file */
+            $path = '';
+
+            // Get file path
+            preg_match('/.*\//', $file, $path);
+            $path = $path[0];
+
+            // Get image src
+            $src = substr($file, strlen($path));
+
+            /** @var \samson\scale\ScaleController $scale */
+            $scale = m('scale');
+
+            foreach (array_keys($scale->thumnails_sizes) as $folder) {
+                // Form image path for scale module
+                $imageScalePath = $path . $folder . '/' . $src;
+                if (file_exists($imageScalePath)) {
+                    m('fs')->delete($imageScalePath);
+                }
+            }
+        }
+
+        // If uploaded file exists - delete it
+        if( file_exists( $file ) ) unlink( $file );
 	
 		// Save empty field value
 		$field->save( '' );
