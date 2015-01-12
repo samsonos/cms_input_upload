@@ -37,6 +37,7 @@ s('.__fieldUpload').pageInit( function( fields )
 				s('.__input', parent).show();
 				s('.__delete', parent).hide();
                 btn.hide();
+                showImage();
 			});
 		}
 
@@ -44,17 +45,42 @@ s('.__fieldUpload').pageInit( function( fields )
 
     // File selected event
     uploadFileHandler(s('input[type="file"]', fields ), {
-        start : function(file) {
+        start : function() {
             fields.parent().css('padding', '0');
             s('.__progress_bar p',fields).css('width', "0%");
             s('.__input', fields).css('display', 'none');
             s('.__progress_text', fields).css('display', 'block');
-            s('.__file_name', fields).html(file.name);
         },
-        response : function() {
-            s('.__progress_text', fields).css('display', 'none');
+        response : function(response) {
+            response = JSON.parse(response);
+            if (response.status == 1) {
+                s('.__progress_text', fields).css('display', 'none');
+                fields.parent().css('padding', '5px 10px');
+                s('.__deletefield', fields).show();
+                s('.__file_name', fields).html(response.path);
+                showImage(response.path);
+            }
+        },
+        error: function(){
             fields.parent().css('padding', '5px 10px');
-            s('.__deletefield', fields).show();
+            s('.__progress_bar p',fields).css('display', "none");
+            s('.__input', fields).css('display', 'block');
+            s('.__progress_text', fields).css('display', 'none');
         }
     });
+
+
+    showImage(s('.__file_name', fields).html());
+
+    function showImage(newImage){
+        var image = s('.__fileImage', fields);
+        if (newImage) {
+            if (newImage.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                image.a('src', newImage);
+                image.show();
+            }
+        } else {
+            image.hide();
+        }
+    }
 });

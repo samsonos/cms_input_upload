@@ -1,4 +1,5 @@
 <div class="__inputfield __container __fieldUpload <?php v('emptyclass')?>" >
+    <img class="__fileImage" src="">
 	<input type="hidden" class="__action" value="<?php v('upload_controller')?>">
 	<input type="hidden" class="__hidden" value="<?php v('field_value')?>">
 	<input type="file" name="v" class="__input" value="" <?php if (!isv('field_value')):?>style="display:inline-block;"<?php endif;?>>
