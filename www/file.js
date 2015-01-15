@@ -69,18 +69,20 @@ s('.__fieldUpload').pageInit( function( fields )
         }
     });
 
-
     showImage(s('.__file_name', fields).html());
 
     function showImage(newImage){
-        var image = s('.__fileImage', fields);
+        var image = s('.__fileImage', fields.parent());
         if (newImage) {
             if (newImage.match(/\.(jpeg|jpg|gif|png)$/) != null) {
                 image.a('src', newImage);
+                image.parent().a('href', newImage);
                 image.show();
             }
         } else {
             image.hide();
         }
     }
+    
+    s('.__fileImage', fields.parent()).lightbox();
 });
