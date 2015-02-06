@@ -30,13 +30,16 @@ class File extends Field
             $scale = m('scale');
             $scale->resize($upload->fullPath(), $upload->name(), $upload->uploadDir);
         }
+        
+         // TODO: Work with upload real and URL paths
+        $urlPath = $upload->path().$upload->name();
 
         /** @var \samson\activerecord\materialfield $field Save path to file in DB */
         $field = Field::fromMetadata($_GET['e'], $_GET['f'], $_GET['i']);
-        $field->save($file_path);
+        $field->save($urlPath);
 
         // Return upload object for further usage
-        return array('status' => 1, 'path' => $upload->fullPath());
+        return array('status' => 1, 'path' => $urlPath);
     }
 
     /** Delete file controller */
