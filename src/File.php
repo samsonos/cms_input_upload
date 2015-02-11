@@ -1,7 +1,7 @@
 <?php
 namespace samson\cms\input;
 
-use samson\upload\Upload;
+use samsonphp\upload\Upload;
 
 /**
  * Generic SamsonCMS input field
