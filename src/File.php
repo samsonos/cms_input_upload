@@ -1,5 +1,5 @@
 <?php
-namespace samson\cms\input;
+namespace samsonphp\cms\input;
 
 use samsonphp\upload\Upload;
 
