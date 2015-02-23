@@ -1,88 +1,91 @@
 /** JS SamsonCMS Select field interaction */
-s('.__fieldUpload').pageInit( function( fields )
+var SamsonCMS_InputUpload = function(fields)
 {
-	/** Delete file handler */
-	s('.__deletefield', fields ).click( function( btn )
-	{
-		// Flag for preventing bubbling delete event
-		btn.deleting = false;
+    fields.each(function(field){
 
-		// If we are not deleting right now - ask confirmation
-		if( !btn.deleting && confirm('Удалить файл?'))
-		{
-			// Get input field block
-			var parent = btn.parent('.__inputfield');
+        /** Delete file handler */
+        s('.__deletefield', field).click(function(btn) {
+            // Flag for preventing bubbling delete event
+            btn.deleting = false;
 
-			// Flag for disabling delete event
-			btn.deleting = true;
+            // If we are not deleting right now - ask confirmation
+            if (!btn.deleting && confirm('Удалить файл?')) {
+                // Get input field block
+                var parent = btn.parent('.__inputfield');
 
-			// Create loader
-			var loader = new Loader( parent.parent() );
-			loader.show();
+                // Flag for disabling delete event
+                btn.deleting = true;
 
-			// Perform ajax file delete
-			s.ajax( btn.a('href'), function( responce )
-			{
-				// Upload field is became empty
-				parent.addClass('empty');
+                // Create loader
+                var loader = new Loader(parent.parent());
+                loader.show();
 
-				// Remove loader
-				loader.remove();
+                // Perform ajax file delete
+                s.ajax(btn.a('href'), function(responce)
+                {
+                    // Upload field is became empty
+                    parent.addClass('empty');
 
-				// Enable delete button for future
-				btn.deleting = false;
+                    // Remove loader
+                    loader.remove();
 
-				// Clear upload file value
-				s('.__input', parent).val('');
-				s('.__input', parent).show();
-				s('.__delete', parent).hide();
-                btn.hide();
-                showImage();
-			});
-		}
+                    // Enable delete button for future
+                    btn.deleting = false;
 
-	},true, true );
-
-    // File selected event
-    uploadFileHandler(s('input[type="file"]', fields ), {
-        start : function() {
-            fields.parent().css('padding', '0');
-            s('.__progress_bar p',fields).css('width', "0%");
-            s('.__input', fields).css('display', 'none');
-            s('.__progress_text', fields).css('display', 'block');
-        },
-        response : function(response) {
-            response = JSON.parse(response);
-            if (response.status == 1) {
-                s('.__progress_text', fields).css('display', 'none');
-                fields.parent().css('padding', '5px 10px');
-                s('.__deletefield', fields).show();
-                s('.__file_name', fields).html(response.path);
-                showImage(response.path);
+                    // Clear upload file value
+                    s('.__input', parent).val('');
+                    s('.__input', parent).show();
+                    s('.__delete', parent).hide();
+                    btn.hide();
+                    showImage();
+                });
             }
-        },
-        error: function(){
-            fields.parent().css('padding', '5px 10px');
-            s('.__progress_bar p',fields).css('display', "none");
-            s('.__input', fields).css('display', 'block');
-            s('.__progress_text', fields).css('display', 'none');
+
+        },true, true);
+
+        // File selected event
+        uploadFileHandler(s('input[type="file"]', field), {
+            start : function() {
+                field.parent().css('padding', '0');
+                s('.__progress_bar p',field).css('width', "0%");
+                s('.__input', field).css('display', 'none');
+                s('.__progress_text', field).css('display', 'block');
+            },
+            response : function(response) {
+                response = JSON.parse(response);
+                if (response.status == 1) {
+                    s('.__progress_text', field).css('display', 'none');
+                    field.parent().css('padding', '5px 10px');
+                    s('.__deletefield', field).show();
+                    s('.__file_name', field).html(response.path);
+                    showImage(response.path);
+                }
+            },
+            error: function(){
+                field.parent().css('padding', '5px 10px');
+                s('.__progress_bar p',field).css('display', "none");
+                s('.__input', field).css('display', 'block');
+                s('.__progress_text', field).css('display', 'none');
+            }
+        });
+
+        showImage(s('.__file_name', field).html());
+
+        function showImage(newImage){
+            var image = s('.__fileImage', field.parent());
+            if (newImage) {
+                if (newImage.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                    image.a('src', newImage);
+                    image.parent().a('href', newImage);
+                    image.show();
+                }
+            } else {
+                image.hide();
+            }
         }
+
+        s('.__fileImage', field.parent()).lightbox();
     });
+};
 
-    showImage(s('.__file_name', fields).html());
-
-    function showImage(newImage){
-        var image = s('.__fileImage', fields.parent());
-        if (newImage) {
-            if (newImage.match(/\.(jpeg|jpg|gif|png)$/) != null) {
-                image.a('src', newImage);
-                image.parent().a('href', newImage);
-                image.show();
-            }
-        } else {
-            image.hide();
-        }
-    }
-    
-    s('.__fileImage', fields.parent()).lightbox();
-});
+s('.__fieldUpload').pageInit(SamsonCMS_InputUpload);
