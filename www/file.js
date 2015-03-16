@@ -48,6 +48,7 @@ var SamsonCMS_InputUpload = function(field)
         start : function() {
             field.parent().css('padding', '0');
             s('.__input', field).hide();
+            s('.__progress_bar',field).show();
             s('.__progress_bar p',field).css('width', "0%");
             s('.__progress_text', field).css('display', 'block');
         },
@@ -55,6 +56,7 @@ var SamsonCMS_InputUpload = function(field)
             response = JSON.parse(response);
             if (response.status == 1) {
                 s('.__progress_text', field).css('display', 'none');
+                s('.__progress_bar',field).hide();
                 field.parent().css('padding', '5px 10px');
                 s('.__deletefield', field).show();
                 s('.__file_name', field).show();
@@ -67,6 +69,7 @@ var SamsonCMS_InputUpload = function(field)
             s('.__progress_bar p',field).css('display', "none");
             s('.__input', field).css('display', 'block');
             s('.__progress_text', field).css('display', 'none');
+            alert('asd');
         }
     });
 
