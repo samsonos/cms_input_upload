@@ -15,11 +15,11 @@ var SamsonCMS_InputUpload = function(field)
             btn.deleting = true;
 
             // Create loader
-            var loader = new Loader(parent.parent());
+            var loader = new Loader(parent.parent(), {type: 'absolute', top: 1, left: 1});
             loader.show();
 
             // Perform ajax file delete
-            s.ajax(btn.a('href'), function(responce)
+            s.ajax(btn.a('href'), function()
             {
                 // Upload field is became empty
                 parent.addClass('empty');
@@ -33,6 +33,8 @@ var SamsonCMS_InputUpload = function(field)
                 // Clear upload file value
                 s('.__input', parent).val('');
                 s('.__input', parent).show();
+
+                s('.__file_name').hide();
                 s('.__delete', parent).hide();
                 btn.hide();
                 showImage();
@@ -45,16 +47,19 @@ var SamsonCMS_InputUpload = function(field)
     uploadFileHandler(s('input[type="file"]', field), {
         start : function() {
             field.parent().css('padding', '0');
+            s('.__input', field).hide();
+            s('.__progress_bar',field).show();
             s('.__progress_bar p',field).css('width', "0%");
-            s('.__input', field).css('display', 'none');
             s('.__progress_text', field).css('display', 'block');
         },
         response : function(response) {
             response = JSON.parse(response);
             if (response.status == 1) {
                 s('.__progress_text', field).css('display', 'none');
+                s('.__progress_bar',field).hide();
                 field.parent().css('padding', '5px 10px');
                 s('.__deletefield', field).show();
+                s('.__file_name', field).show();
                 s('.__file_name', field).html(response.path);
                 showImage(response.path);
             }
@@ -64,6 +69,7 @@ var SamsonCMS_InputUpload = function(field)
             s('.__progress_bar p',field).css('display', "none");
             s('.__input', field).css('display', 'block');
             s('.__progress_text', field).css('display', 'none');
+            alert('asd');
         }
     });
 
