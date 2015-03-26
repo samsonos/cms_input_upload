@@ -1,7 +1,8 @@
 <?php
-namespace samson\cms\input;
+namespace samsoncms\input\file;
 
 use samsonphp\upload\Upload;
+use samsoncms\input\Field;
 
 /**
  * Generic SamsonCMS input field
@@ -10,6 +11,12 @@ use samsonphp\upload\Upload;
  */
 class File extends Field
 {
+    /** @var  int Field type identifier */
+    protected static $type = 1;
+
+    /** @var string Module identifier */
+    protected $id = 'samson_cms_input_file';
+
     /** Upload file controller */
     public function __async_upload()
     {
