@@ -41,8 +41,8 @@ class File extends Field
          // TODO: Work with upload real and URL paths
         $urlPath = $upload->path().$upload->name();
 
-        /** @var \samson\activerecord\materialfield $field Save path to file in DB */
-        $field = Field::fromMetadata($_GET['e'], $_GET['f'], $_GET['i']);
+        /** @var \samsoncms\input\Field $field Save path to file in DB */
+        $field = static::createFromMetadata($_GET['e'], $_GET['f'], $_GET['i']);
         $field->save($urlPath);
 
         // Return upload object for further usage
@@ -57,11 +57,11 @@ class File extends Field
         /** @var \samsonphp\fs\FileService $fsModule */
         $fsModule = m('fs');
 
-        /** @var \samson\activerecord\materialfield $field */
-        $field = Field::fromMetadata($_GET['e'], $_GET['f'], $_GET['i']);
+        /** @var \samsoncms\input\Field $field */
+        $field = static::createFromMetadata($_GET['e'], $_GET['f'], $_GET['i']);
 
         // Build uploaded file path
-        $file = $field->obj->Value;
+        $file = $field->value();
 
         // Delete thumbnails
         if (class_exists('\samson\scale\ScaleController', false) && $this->isImage($fsModule->extension($file))) {
@@ -103,11 +103,12 @@ class File extends Field
     /** @see \samson\core\iModuleViewable::toView() */
     public function toView($prefix = NULL, array $restricted = array())
     {
-        $controller = \samson\core\AutoLoader::oldClassName(get_class($this));
+//        $controller = \samson\core\AutoLoader::oldClassName(get_class($this));
+//        trace($controller, true);
 
         // Generate controller links
-        $this->set('upload_controller', $controller.'/upload?f='.$this->param.'&e='.$this->entity.'&i='.$this->obj->id)
-        ->set('delete_controller', $controller.'/delete?f='.$this->param.'&e='.$this->entity.'&i='.$this->obj->id);
+        $this->set('upload_controller', $this->id.'/upload?f='.$this->param.'&e='.$this->entity.'&i='.$this->obj->id)
+        ->set('delete_controller', $this->id.'/delete?f='.$this->param.'&e='.$this->entity.'&i='.$this->obj->id);
 
         //$this->set('empty_text', 'Выберите текст');
         // Call parent rendering routine
