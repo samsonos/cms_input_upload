@@ -34,7 +34,7 @@ var SamsonCMS_InputUpload = function(field)
                 s('.__input', parent).val('');
                 s('.__input', parent).show();
 
-                s('.__file_name').hide();
+                s('.__file_name', parent).hide();
                 s('.__delete', parent).hide();
                 btn.hide();
                 showImage();
@@ -69,22 +69,31 @@ var SamsonCMS_InputUpload = function(field)
             s('.__progress_bar p',field).css('display', "none");
             s('.__input', field).css('display', 'block');
             s('.__progress_text', field).css('display', 'none');
-            alert('asd');
         }
     });
 
     showImage(s('.__file_name', field).html());
 
     function showImage(newImage){
+        var imageContainer = s('.__field_upload_image', field.parent());
         var image = s('.__fileImage', field.parent());
         if (newImage) {
             if (newImage.match(/\.(jpeg|jpg|gif|png)$/) != null) {
                 image.a('src', newImage);
                 image.parent().a('href', newImage);
                 image.show();
+                image.load(function(){
+                    var height = parseInt(image.css('max-height'));
+                    height = image.height() > height ? height : image.height();
+                    imageContainer.height(height);
+                    var width = parseInt(image.css('max-width'));
+                    width = image.width() > width ? width : image.width();
+                    imageContainer.width(width);
+                });
             }
         } else {
             image.hide();
+            imageContainer.height(0);
         }
     }
 
