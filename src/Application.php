@@ -6,26 +6,20 @@
 
 namespace samsoncms\input\file;
 
+use samson\activerecord\dbQuery;
 use samsonphp\upload\Upload;
 
-class UploadInputApplication extends \samsoncms\input\InputApplication
+/**
+ * SamsonCMS file input module
+ * @author Maxim Omelchenko <omelchenko@samsonos.com>
+ */
+class Application extends \samsoncms\input\Application
 {
-    protected $id = 'samson_cms_input_file';
+    /** @var int Field type number */
+    public static $type = 1;
 
-    /**
-     * Create field class instance
-     *
-     * @param string|\samson\activerecord\dbRecord $entity Class name or object
-     * @param string|null $param $entity class field
-     * @param int $identifier Identifier to find and create $entity instance
-     * @param \samson\activerecord\dbQuery|null $dbQuery Database object
-     * @return self
-     */
-    public function createField($entity, $param = null, $identifier = null, $dbQuery = null)
-    {
-        $this->field = new File($entity, $param, $identifier, $dbQuery);
-        return $this;
-    }
+    /** @var string SamsonCMS field class */
+    protected $fieldClass = '\samsoncms\input\file\File';
 
     /** Upload file controller */
     public function __async_upload()
@@ -52,7 +46,7 @@ class UploadInputApplication extends \samsoncms\input\InputApplication
         $urlPath = $upload->path().$upload->name();
 
         /** @var \samsoncms\input\Field $field Save path to file in DB */
-        $this->createField($_GET['e'], $_GET['f'], $_GET['i']);
+        $this->createField(new dbQuery(), $_GET['e'], $_GET['f'], $_GET['i']);
         $this->field->save($urlPath);
 
         // Return upload object for further usage
@@ -68,10 +62,10 @@ class UploadInputApplication extends \samsoncms\input\InputApplication
         $fsModule = m('fs');
 
         /** @var \samsoncms\input\Field $field */
-        $this->createField($_GET['e'], $_GET['f'], $_GET['i']);
+        $this->createField(new dbQuery(), $_GET['e'], $_GET['f'], $_GET['i']);
 
         // Build uploaded file path
-        $file = $this->field->getValue();
+        $file = $this->field->value();
 
         // Delete thumbnails
         if (class_exists('\samson\scale\ScaleController', false) && $this->isImage($fsModule->extension($file))) {
@@ -108,21 +102,5 @@ class UploadInputApplication extends \samsoncms\input\InputApplication
     private function isImage($extension)
     {
         return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'gif');
-    }
-
-    /** @see \samson\core\iModuleViewable::toView() */
-    public function toView($prefix = NULL, array $restricted = array())
-    {
-        $params = $this->field->getObjectData();
-        $this->view($this->defaultView)
-            ->set('uploadController', url_build($this->id, 'upload'))
-            ->set('deleteController', url_build($this->id, 'delete'))
-            ->set('getParams', '?f=' . $params['param'] . '&e='. $params['entity'] . '&i=' . $params['dbObject']->id)
-            ->set('value', $params['value']);
-
-        //$this->set('empty_text', 'Выберите текст');
-        // Call parent rendering routine
-//        return parent::toView($prefix, $restricted);
-        return array($prefix . 'html' => $this->output());
     }
 }
