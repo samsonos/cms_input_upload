@@ -14,7 +14,6 @@
     "require":{
         "samsonos/cms_input":"*",
         "samsonphp/upload":"*",
-        "samsonos/php_scale":"*",
         "samsonos/js_core":"*"
     },
     "license":"Open Software License (OSL) v 3.0",
