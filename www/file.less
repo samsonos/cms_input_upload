@@ -9,13 +9,23 @@
   }
 	
   /* Input file upload */
-  .__input { display:none; }
+  .__input {
+    display:none;
+  }
 
   /* Uploaded file name */
-  .__file_name { float:left; font-size: 12px !important; text-decoration:underline; margin-top: 2px }
+  .__file_name {
+    float:left;
+    font-size: 12px !important;
+    text-decoration:underline;
+    margin-top: 2px
+  }
 
   /* Delete button */
-  .__delete, .__deletefield { float:left; margin-right:5px;}
+  .__delete, .__deletefield {
+    float:left;
+    margin-right:5px;
+  }
 
   /* Progressbar */
   .__progress_bar {
@@ -34,6 +44,7 @@
     width: 100%;
     line-height: 30px;
     bottom: 0;
+    display: none;
   }
 
   /* Style for empty value */
@@ -58,6 +69,13 @@
 }
 
 .__field_upload_image {
+  display: block;
+  height: 0;
+  transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+
   .__fileImage {
     max-height: 200px;
     max-width: 320px;
