@@ -92,9 +92,12 @@ class Application extends \samsoncms\input\Application
             }
         }
 
-        $fsModule->delete($file);
-        // Save empty field value
-        $this->field->save('');
+        if ($fsModule->exists($file)) {
+            $fsModule->delete($file);
+        }
+        
+        // TODO Save empty field value
+        $this->field->save(' ');
 
         return array('status'=>true);
     }
