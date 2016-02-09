@@ -13,6 +13,11 @@ class File extends Field
     /** {@inheritdoc} */
     public function view($renderer, $saveHandler = '')
     {
+		$value = $this->value();
+        if($value === ' ') {
+            $value = '';
+        }
+	
         return $renderer->view($this->defaultView)
             //TODO Fix it later
             ->set('uploadController', url_build(preg_replace('/(_\d+)/', '', $renderer->id()), 'upload'))
