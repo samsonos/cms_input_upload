@@ -20,10 +20,10 @@ class File extends Field
 	
         return $renderer->view($this->defaultView)
             //TODO Fix it later
-            ->set('uploadController', url_build(preg_replace('/(_\d+)/', '', $renderer->id()), 'upload'))
-            ->set('deleteController', url_build(preg_replace('/(_\d+)/', '', $renderer->id()), 'delete'))
-            ->set('getParams', '?f=' . $this->param . '&e='. $this->entity . '&i=' . $this->dbObject->id)
-            ->set('value', $this->value())
+            ->set(url_build(preg_replace('/(_\d+)/', '', $renderer->id()), 'upload'), 'uploadController')
+            ->set(url_build(preg_replace('/(_\d+)/', '', $renderer->id()), 'delete'), 'deleteController')
+            ->set('?f=' . $this->param . '&e='. $this->entity . '&i=' . $this->dbObject->id, 'getParams')
+            ->set($this->value(), 'value')
             ->output();
     }
 }
