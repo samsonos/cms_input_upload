@@ -24,10 +24,8 @@ class Application extends \samsoncms\input\Application
     /** Upload file controller */
     public function __async_upload()
     {
-        s()->async(true);
-
         /** @var \samsonphp\fs\FileService $fsModule */
-        $fsModule = m('fs');
+        $fsModule = $this->system->module('fs');
 
         // Create object for uploading file to server
         $upload = new Upload(array(), $_GET['i']);
@@ -38,7 +36,7 @@ class Application extends \samsoncms\input\Application
         // Call scale if it is loaded
         if (class_exists('\samson\scale\ScaleController', false) && $this->isImage($fsModule->extension($file_path))) {
             /** @var \samson\scale\ScaleController $scale */
-            $scale = m('scale');
+            $scale = $this->system->module('scale');
             $scale->resize($upload->fullPath(), $upload->name(), $upload->uploadDir);
         }
 
@@ -56,10 +54,8 @@ class Application extends \samsoncms\input\Application
     /** Delete file controller */
     public function __async_delete()
     {
-        s()->async(true);
-
         /** @var \samsonphp\fs\FileService $fsModule */
-        $fsModule = m('fs');
+        $fsModule = $this->system->module('fs');
 
         /** @var \samsoncms\input\Field $field */
         $this->createField(new dbQuery(), $_GET['e'], $_GET['f'], $_GET['i']);
