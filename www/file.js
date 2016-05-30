@@ -6,8 +6,21 @@ var SamsonCMS_InputUpload = function(field)
         // Flag for preventing bubbling delete event
         btn.deleting = false;
 
+        // TODO Rewrite this block to template view
+        var div = '<div class="confirm"><div class="confirm-wrapper"><div class="inner-confirm">Delete?<div class="confirm-button icon-delete">Yes</div><div class="close icon2 icon_16x16 fa-times"></div></div></div></div>';
+        s('html').append(div);
+
+        // Show info
+        var tb = tinybox(s('.confirm'), true);
+        tb.show();
+
+        // Close info-popup
+        s('.confirm .close').click(function() {
+            tb.hide();
+        });
+
         // If we are not deleting right now - ask confirmation
-        if (!btn.deleting && confirm('Удалить файл?')) {
+        s('.confirm-button').click(function() {
             // Get input field block
             var parent = btn.parent('.__inputfield');
 
@@ -17,6 +30,9 @@ var SamsonCMS_InputUpload = function(field)
             // Create loader
             var loader = new Loader(parent.parent(), {type: 'absolute', top: 1, left: 1});
             loader.show();
+
+            // Close div - confirm
+            tb.hide();
 
             // Perform ajax file delete
             s.ajax(btn.a('href'), function()
@@ -39,7 +55,7 @@ var SamsonCMS_InputUpload = function(field)
                 btn.hide();
                 showImage();
             });
-        }
+        });
 
     },true, true);
 
